@@ -6,8 +6,6 @@ see my [Pre_data](https://github.com/ben0i0d/Pre_Data)
 
 copy to `data`
 
-## train
+## RUN
 
-`python main.py`
-
-**If you wanna use cpu ,add --device cpu**
+see `process.ipynb`

@@ -17,9 +17,7 @@ from util.parser import get_parser
 from util.util import import_class, accuracy, AverageMeter
 
 class Processor():
-    """ 
-        Processor for Skeleton-based Action Recgnition
-    """
+
     def __init__(self, arg):
         self.arg = arg
         self.save_arg()
@@ -51,7 +49,7 @@ class Processor():
         self.device = self.arg.device
         Model = import_class(self.arg.model)
         self.model = Model(**self.arg.model_args).to(self.device)
-        self.loss = nn.BCEWithLogitsLoss().to(self.device)
+        self.loss = nn.CrossEntropyLoss().to(self.device)
 
     def load_optimizer(self):
         if self.arg.optimizer == 'SGD':
@@ -102,8 +100,7 @@ class Processor():
 
                 # get data
                 data = data.float().to(self.device, non_blocking=True)
-                label = label.float().to(self.device, non_blocking=True)
-                label = label.unsqueeze(1)
+                label = label.long().to(self.device, non_blocking=True)
 
                 # forward
                 output = self.model.forward(data)
@@ -132,7 +129,7 @@ class Processor():
             if top1.avg > self.best_train_acc1:
                 self.best_train_acc1 = top1.avg
             
-            #self.eval()
+            self.eval()
 
             state = dict(epoch=epoch + 1, model=self.model.state_dict(),optimizer=self.optimizer.state_dict(),scheduler=self.scheduler.state_dict())
             torch.save(state, os.path.join(self.arg.work_dir,'checkpoint.pth'))
@@ -154,8 +151,7 @@ class Processor():
         with torch.no_grad():
             for data, label in self.testloader:
                 data = data.float().to(self.device, non_blocking=True)
-                label = label.float().to(self.device, non_blocking=True)
-                label = label.unsqueeze(1)
+                label = label.long().to(self.device, non_blocking=True)
                                 
                 output = self.model(data)
                 loss = self.loss(output, label)
