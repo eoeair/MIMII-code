@@ -6,8 +6,6 @@
 
 也就是说，这是一个两阶段模型，包括模态识别与单模态下的分类
 
-TODO：全流程，无监督（事实上，数据本身就是要求无监督）
-
 ## Data pre
 
 see my [Pre_data](https://github.com/ben0i0d/Pre_Data)

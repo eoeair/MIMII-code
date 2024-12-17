@@ -5,6 +5,8 @@ def get_parser():
     # parameter priority: command line > config > default
     parser = argparse.ArgumentParser(description='Spatial Temporal Graph Convolution Network')
     parser.add_argument('--work-dir',default='./work_dir/temp',help='the work folder for storing results')
+    parser.add_argument('--pretrained',help='the work folder for pretrained results')
+    parser.add_argument('--weights',default='freeze', type=str,choices=('finetune', 'freeze'),help='finetune or freeze resnet weights')
     parser.add_argument('--config',default='./config/train.yaml',help='path to the configuration file')
 
     # processor
@@ -20,12 +22,6 @@ def get_parser():
     parser.add_argument('--train-feeder-args',default=dict(),help='the arguments of data loader for training')
     parser.add_argument('--test-feeder-args',default=dict(),help='the arguments of data loader for test')
 
-    # model
-    parser.add_argument('--model', default=None, help='the model will be used')
-    parser.add_argument('--model-args',type=dict,default=dict(),help='the arguments of model')
-    parser.add_argument('--weights',default=None,help='the weights for network initialization')
-    parser.add_argument('--ignore-weights',type=str,default=[],nargs='+',help='the name of weights which will be ignored in the initialization')
-
     # optim
     parser.add_argument('--base-lr', type=float, default=0.01, help='initial learning rate')
     parser.add_argument('--step',type=int,default=[20, 40, 60],nargs='+',help='the epoch where optimizer reduce the learning rate')
@@ -37,5 +33,19 @@ def get_parser():
     parser.add_argument('--start-epoch',type=int,default=0,help='start training from which epoch')
     parser.add_argument('--num-epoch',type=int,default=80,help='stop training in which epoch')
     parser.add_argument('--weight-decay',type=float,default=0.0005,help='weight decay for optimizer')
+
+    # model
+    parser.add_argument('--model', help='the model will be used')
+    parser.add_argument('--model_args', type=dict, default=dict(), help='the arguments of model')
+    parser.add_argument('--model_target_args', type=dict, default=dict(), help='the arguments of model')
+
+    parser.add_argument('--moving_average_decay', type=float)
+    parser.add_argument('--projection_size', type=int)
+    parser.add_argument('--projection_hidden_size', type=int)
+    parser.add_argument('--drop_percent', type=float)
+
+    parser.add_argument('--K', type=float)
+    parser.add_argument('--tt', type=float)
+    parser.add_argument('--ot', type=float)
 
     return parser
