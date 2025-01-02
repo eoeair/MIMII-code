@@ -1,4 +1,4 @@
-work_dir: ./work_dir/snr/pretrain1
+work_dir: ./work_dir/snr/pretrain
 
 # feeder
 feeder: feeder.Feeder_snr
@@ -22,7 +22,7 @@ ot: 0.1
 drop_percent: 0.2
 
 #optim
-optimizer: 'LARS'
+optimizer: 'Adam'
 weight_decay: 1e-5
 base_lr: 1e-2
 step: [10, 50]
@@ -31,7 +31,7 @@ step: [10, 50]
 device: 0
 batch_size: 64 
 test_batch_size: 64
-num_epoch: 80
+num_epoch: 150
 nesterov: True
 
 
