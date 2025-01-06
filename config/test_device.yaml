@@ -1,11 +1,14 @@
-work_dir: ./work_dir/label/pretrain
+pretrained: ./work_dir/device/pretrain/best.pth
+work_dir: ./work_dir/device/eval
 
 # feeder
-feeder: feeder.Feeder_label
+feeder: feeder.Feeder_device
 train_feeder_args:
   data_path: ./data/train.pkl
-  mode: double
-
+  mode: single
+test_feeder_args:
+  data_path: ./data/test.pkl
+  mode: single
 # model
 model: net.CNN
 model_args:
@@ -31,7 +34,7 @@ step: [10, 50]
 device: 0
 batch_size: 64 
 test_batch_size: 64
-num_epoch: 150
+num_epoch: 80
 nesterov: True
 
 
