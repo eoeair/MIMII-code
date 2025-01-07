@@ -77,7 +77,7 @@ class Feeder_device(torch.utils.data.Dataset):
                 self.label.append(i)
         
     def __len__(self):
-        return len(self.data[self.device])
+        return len(self.data)
 
     def __getitem__(self, index):
         # get data label
@@ -127,7 +127,7 @@ class Feeder_label(torch.utils.data.Dataset):
                 self.label.append(i)
         
     def __len__(self):
-        return len(self.data[self.label])
+        return len(self.data)
 
     def __getitem__(self, index):
         # get data label
