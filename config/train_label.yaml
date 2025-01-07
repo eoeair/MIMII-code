@@ -1,13 +1,10 @@
-work_dir: ./work_dir/label
+work_dir: ./work_dir/label/pretrain
 
 # feeder
 feeder: feeder.Feeder_label
 train_feeder_args:
   data_path: ./data/train.pkl
-  snr: 0
-test_feeder_args:
-  data_path: ./data/test.pkl
-  snr: 0
+  mode: double
 
 # model
 model: net.CNN
@@ -15,17 +12,26 @@ model_args:
   channels: 13
   num_classes: 2
 
+# byol
+moving_average_decay: 0.99
+projection_size: 256
+projection_hidden_size: 512
+K: 512
+tt: 0.03
+ot: 0.1
+drop_percent: 0.2
+
 #optim
 optimizer: 'Adam'
 weight_decay: 1e-5
-base_lr: 1e-3
+base_lr: 1e-2
 step: [10, 50]
 
 # training
 device: 0
 batch_size: 64 
 test_batch_size: 64
-num_epoch: 80
+num_epoch: 150
 nesterov: True
 
 
