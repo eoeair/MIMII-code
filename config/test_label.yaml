@@ -1,14 +1,16 @@
-pretrained: ./work_dir/snr/pretrain/best.pth
-work_dir: ./work_dir/snr/eval
+pretrained: ./work_dir/label/pretrain/best.pth
+work_dir: ./work_dir/label/eval
 
 # feeder
 feeder: feeder.Feeder_snr
 train_feeder_args:
   data_path: ./data/train.pkl
   mode: single
+  snr: 0
 test_feeder_args:
   data_path: ./data/test.pkl
   mode: single
+  snr: 0
 
 # model
 model: net.CNN
@@ -37,6 +39,10 @@ batch_size: 64
 test_batch_size: 64
 num_epoch: 80
 nesterov: True
+
+
+
+
 
 
 

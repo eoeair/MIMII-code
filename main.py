@@ -118,12 +118,11 @@ class Processor():
             
             loss_epoch = 0
             
-            for batch_idx, ([data1, data2], label) in enumerate(self.trainloader):
+            for batch_idx, [data1, data2] in enumerate(self.trainloader):
 
                 # get data
                 data1 = data1.float().to(self.device, non_blocking=True)
                 data2 = data2.float().to(self.device, non_blocking=True)
-                label = label.long().to(self.device, non_blocking=True)
 
                 # forward
                 loss = self.model.forward(data1,data2)

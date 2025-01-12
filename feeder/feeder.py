@@ -5,33 +5,25 @@ import numpy as np
 
 from . import augmentations
 
-class Feeder_snr(torch.utils.data.Dataset):
-    """ Feeder for label inputs """
+class Feeder_base(torch.utils.data.Dataset):
+    """ Feeder base """
 
-    def __init__(self, data_path, mode):
+    def __init__(self, data_path, mode, snr=0):
         self.data_path = data_path
         self.mode = mode
+        self.snr = snr
         self.load_data()
     
     def load_data(self):
-        # data: mfcc snr device label
-        with open(self.data_path, 'rb') as file:
-            data = pickle.load(file)
-        
-        self.data = []
-        self.label = []
-
-        for i,snr in enumerate(data):
-            for j in snr:
-                self.data.append(j)
-                self.label.append(i)
+        # data: [SNR[MFCC,device,label]]
+        pass
 
     def __len__(self):
-        return len(self.data)
+        return len(self.label)
 
     def __getitem__(self, index):
         # get data label
-        data = self.data[index][0]
+        data = self.data[index]
         label = self.label[index]
         
         if self.mode == 'single':
@@ -40,7 +32,7 @@ class Feeder_snr(torch.utils.data.Dataset):
             # augmentation
             data1 = self._augs(data)
             data2 = self._augs(data)
-            return [data1, data2], label
+            return [data1, data2]
 
     def _augs(self, data):
         if random.random() < 0.5:
@@ -55,42 +47,47 @@ class Feeder_snr(torch.utils.data.Dataset):
             data = augmentations.time_warp(data)
         return augmentations.crop_or_pad(data)
 
-class Feeder_device(torch.utils.data.Dataset):
-    """ Feeder for label inputs """
+class Feeder_snr(Feeder_base):
+    """ Feeder for snr inputs """
+    def load_data(self):
 
-    def __init__(self, data_path, snr):
-        self.data_path = data_path
-        self.snr = snr
-        self.load_data()
+        with open(self.data_path, 'rb') as file:
+            data = pickle.load(file)
+        
+        self.data = []
+        self.label = []
+
+        for i,snr in enumerate(data):
+            for j in snr:
+                self.data.append(j[0])
+                self.label.append(i)
+
+class Feeder_device(Feeder_base):
+    """ Feeder for device inputs """
     
     def load_data(self):
-        # data: mfcc snr device label
+
         with open(self.data_path, 'rb') as file:
-            self.data = pickle.load(file)
+            data = pickle.load(file)[self.snr]
         
-    def __len__(self):
-        return len(self.data[self.snr])
+        self.data = []
+        self.label = []
 
-    def __getitem__(self, index):
-        # get data
-        return self.data[self.snr][index][0], self.data[self.snr][index][2]
+        for i in data:
+            self.data.append(i[0])
+            self.label.append(i[1])
 
-class Feeder_label(torch.utils.data.Dataset):
+class Feeder_label(Feeder_base):
     """ Feeder for label inputs """
 
-    def __init__(self, data_path, snr):
-        self.data_path = data_path
-        self.snr = snr
-        self.load_data()
-    
     def load_data(self):
-        # data: mfcc snr device label
-        with open(self.data_path, 'rb') as file:
-            self.data = pickle.load(file)
-        
-    def __len__(self):
-        return len(self.data[self.snr])
 
-    def __getitem__(self, index):
-        # get data
-        return self.data[self.snr][index][0], self.data[self.snr][index][2]
+        with open(self.data_path, 'rb') as file:
+            data = pickle.load(file)[self.snr]
+        
+        self.data = []
+        self.label = []
+
+        for i in data:
+            self.data.append(i[0])
+            self.label.append(i[2])

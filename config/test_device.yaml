@@ -1,15 +1,17 @@
-pretrained: ./work_dir/snr/pretrain/best.pth
-work_dir: ./work_dir/snr/eval
+pretrained: ./work_dir/device/pretrain/best.pth
+work_dir: ./work_dir/device/eval
 
 # feeder
 feeder: feeder.Feeder_snr
 train_feeder_args:
   data_path: ./data/train.pkl
   mode: single
+  snr: 0
 test_feeder_args:
   data_path: ./data/test.pkl
   mode: single
-
+  snr: 0
+  
 # model
 model: net.CNN
 model_args:

@@ -17,3 +17,7 @@ copy to `data`
 ## RUN
 
 see `process.ipynb`
+
+## Requirements
+
+`scikit-learn pyaml tensorboardX torch`
